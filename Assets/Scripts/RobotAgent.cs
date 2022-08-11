@@ -191,13 +191,7 @@ public class RobotAgent : Agent
     // Moves the agent according to the selected action
     public void MoveAgent(float act0, float act1)
     {
-        var dirToGo = Vector3.zero;
-        var rotateDir = Vector3.zero;
-        dirToGo = transform.forward * 0.03f + transform.up * act0 * 0.02f;
-        rotateDir = -transform.up * act1;
-
-        transform.Rotate(rotateDir, Time.fixedDeltaTime * Math.Abs(act1));
-        m_AgentRb.AddForce(dirToGo, ForceMode.VelocityChange);
+        m_AgentRb.transform.position = new Vector3(act0, m_AgentRb.transform.position[1], act1);
     }
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
