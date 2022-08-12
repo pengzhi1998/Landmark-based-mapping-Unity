@@ -17,34 +17,30 @@ public class ObsSideChannel : SideChannel
     protected override void OnMessageReceived(IncomingMessage msg)
     {
         IList<float> Init = msg.ReadFloatList();
-        if (RobotAgent.testMode)
-        {
-            TestAgent.testStartPos = new Vector3(Init[0], Init[1], Init[2]);
-            TestAgent.testStartOri = new Vector3(Init[3], Init[4], Init[5]);
-
-            RobotAgent.randomGoalX = Init[6];
-            RobotAgent.randomGoalY = Init[7];
-            RobotAgent.randomGoalZ = Init[8];
-
-            WaterSettings.controlVisibility = Init[9];
-        }
-        else
-        {
-            WaterSettings.controlVisibility = Init[9];
-        }
-    }
-
-    public void SendObsToPython(float horizontalDist, float verticleDist, float Angle,
-    float Depth_from_Surface, float pos_x, float pos_z, float orientation)
-    {
-
-        List<float> msgToSend = new List<float>() { horizontalDist, verticleDist, Angle, Depth_from_Surface,
-         pos_x, pos_z, orientation};
-        using (var msgOut = new OutgoingMessage())
-        {
-            msgOut.WriteFloatList(msgToSend);
-            QueueMessageToSend(msgOut);
-        }
-
+        Cylinder cylinder = GameObject.Find("Cylinder").GetComponent<Cylinder>();
+        Cube cube = GameObject.Find("Cube").GetComponent<Cube>();
+        Capsule capsule = GameObject.Find("Capsule").GetComponent<Capsule>();
+        Sphere sphere = GameObject.Find("Sphere").GetComponent<Sphere>();
+        Stone stone = GameObject.Find("Stone").GetComponent<Stone>();
+        cylinder.transform.position = new Vector3(Init[0], -3.5f, Init[1]);
+        cube.transform.position = new Vector3(Init[2], -3.5f, Init[3]);
+        capsule.transform.position = new Vector3(Init[4], -3.5f, Init[5]);
+        sphere.transform.position = new Vector3(Init[6], -3.5f, Init[7]);
+        stone.transform.position = new Vector3(Init[8], -3.5f, Init[9]);
+//        if (RobotAgent.testMode)
+//        {
+//            TestAgent.testStartPos = new Vector3(Init[0], Init[1], Init[2]);
+//            TestAgent.testStartOri = new Vector3(Init[3], Init[4], Init[5]);
+//
+//            RobotAgent.randomGoalX = Init[6];
+//            RobotAgent.randomGoalY = Init[7];
+//            RobotAgent.randomGoalZ = Init[8];
+//
+//            WaterSettings.controlVisibility = Init[9];
+//        }
+//        else
+//        {
+//            WaterSettings.controlVisibility = Init[9];
+//        }
     }
 }
