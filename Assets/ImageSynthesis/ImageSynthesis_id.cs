@@ -144,8 +144,8 @@ public class ImageSynthesis_id : MonoBehaviour {
 		opticalFlowMaterial.SetFloat("_Sensitivity", opticalFlowSensitivity);
 
 		// setup command buffers and replacement shaders
-		SetupCameraWithReplacementShader(capturePasses[0].camera, uberReplacementShader, ReplacelementModes.ObjectId);
-		SetupCameraWithReplacementShader(capturePasses[2].camera, uberReplacementShader, ReplacelementModes.CatergoryId);
+		SetupCameraWithReplacementShader(capturePasses[1].camera, uberReplacementShader, ReplacelementModes.ObjectId);
+		SetupCameraWithReplacementShader(capturePasses[0].camera, uberReplacementShader, ReplacelementModes.CatergoryId);
 		SetupCameraWithReplacementShader(capturePasses[3].camera, uberReplacementShader, ReplacelementModes.DepthCompressed, Color.white);
 		SetupCameraWithReplacementShader(capturePasses[4].camera, uberReplacementShader, ReplacelementModes.Normals);
 		SetupCameraWithPostShader(capturePasses[5].camera, opticalFlowMaterial, DepthTextureMode.Depth | DepthTextureMode.MotionVectors);
