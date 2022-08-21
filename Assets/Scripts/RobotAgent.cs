@@ -46,7 +46,7 @@ public class RobotAgent : Agent
 
     public override void OnEpisodeBegin()
     {
-        count = 0;
+        count = -2;
 
         m_AgentRb.transform.position = new Vector3(0f, 3f, 0f);
         m_AgentRb.transform.eulerAngles = new Vector3(0f, 270f, 0f);
@@ -55,6 +55,10 @@ public class RobotAgent : Agent
         m_AgentRb.angularVelocity = Vector3.zero;
 
         SetResetParameters();
+
+        DisplayObs(m_AgentRb.transform.position);
+        obsSideChannel.SendObsToPython(count, m_AgentRb.transform.position[0], m_AgentRb.transform.position[1],
+        m_AgentRb.transform.position[2]);
     }
 
     // Moves the agent according to the selected action
@@ -82,7 +86,8 @@ public class RobotAgent : Agent
         MoveAgent(continuous_actions[0], continuous_actions[1]);
 
         DisplayObs(m_AgentRb.transform.position);
-        obsSideChannel.SendObsToPython(count);
+        obsSideChannel.SendObsToPython(count, m_AgentRb.transform.position[0], m_AgentRb.transform.position[1],
+        m_AgentRb.transform.position[2]);
     }
 
     public void DisplayObs(Vector3 pos_rb)

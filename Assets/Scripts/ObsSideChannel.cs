@@ -44,9 +44,9 @@ public class ObsSideChannel : SideChannel
 //        }
     }
 
-    public void SendObsToPython(float count)
+    public void SendObsToPython(float count, float pos_x, float pos_y, float pos_z)
     {
-        List<float> msgToSend = new List<float>() {count};
+        List<float> msgToSend = new List<float>() {count, pos_x, pos_y, pos_z};
         using (var msgOut = new OutgoingMessage())
         {
             msgOut.WriteFloatList(msgToSend);
