@@ -43,4 +43,14 @@ public class ObsSideChannel : SideChannel
 //            WaterSettings.controlVisibility = Init[9];
 //        }
     }
+
+    public void SendObsToPython(float count)
+    {
+        List<float> msgToSend = new List<float>() {count};
+        using (var msgOut = new OutgoingMessage())
+        {
+            msgOut.WriteFloatList(msgToSend);
+            QueueMessageToSend(msgOut);
+        }
+    }
 }

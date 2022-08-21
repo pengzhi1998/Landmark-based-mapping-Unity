@@ -18,15 +18,6 @@ public class RobotAgent : Agent
 //    RayPerceptionSensorComponent3D RayInput;
     ObsSideChannel obsSideChannel;
 
-    public static float randomGoalX = 0f;
-    public static float randomGoalY = 0f;
-    public static float randomGoalZ = 0f;
-
-    public static float horizontal_distance = 0f;
-    public static float angle_rb_2_g = 0f;
-
-    public static bool testMode;
-
     public Text debugText;
     public int count;
 
@@ -57,6 +48,9 @@ public class RobotAgent : Agent
     {
         count = 0;
 
+        m_AgentRb.transform.position = new Vector3(0f, 3f, 0f);
+        m_AgentRb.transform.eulerAngles = new Vector3(0f, 270f, 0f);
+
         m_AgentRb.velocity = Vector3.zero;
         m_AgentRb.angularVelocity = Vector3.zero;
 
@@ -66,8 +60,17 @@ public class RobotAgent : Agent
     // Moves the agent according to the selected action
     public void MoveAgent(float act0, float act1)
     {
-        m_AgentRb.transform.position = new Vector3(act0, 2f, act1);
+        m_AgentRb.transform.position = new Vector3(act0, 3f, act1);
         m_AgentRb.transform.eulerAngles = new Vector3(0f, 270f, 0f);
+
+//        var dirToGo = Vector3.zero;
+//        var rotateDir = Vector3.zero;
+//        dirToGo = transform.forward * 0.03f + transform.up * act0 * 0.00f;
+//        rotateDir = -transform.up * 0.0f;
+//
+//        transform.Rotate(rotateDir, Time.fixedDeltaTime * Math.Abs(0.0f));
+//        m_AgentRb.AddForce(dirToGo, ForceMode.VelocityChange);
+
     }
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
@@ -79,6 +82,7 @@ public class RobotAgent : Agent
         MoveAgent(continuous_actions[0], continuous_actions[1]);
 
         DisplayObs(m_AgentRb.transform.position);
+        obsSideChannel.SendObsToPython(count);
     }
 
     public void DisplayObs(Vector3 pos_rb)
