@@ -64,7 +64,7 @@ public class RobotAgent : Agent
     // Moves the agent according to the selected action
     public void MoveAgent(float act0, float act1)
     {
-        m_AgentRb.transform.position = new Vector3(act0, 3f, act1);
+        m_AgentRb.transform.position = new Vector3(act0, -1f, act1);
         m_AgentRb.transform.eulerAngles = new Vector3(0f, 270f, 0f);
 
 //        var dirToGo = Vector3.zero;
