@@ -20,12 +20,7 @@ public class ImageSynthesis_id : MonoBehaviour {
 
 	// pass configuration
 	private CapturePass[] capturePasses = new CapturePass[] {
-		new CapturePass() { name = "_img" },
-		new CapturePass() { name = "_id", supportsAntialiasing = false },
-		new CapturePass() { name = "_layer", supportsAntialiasing = false },
-		new CapturePass() { name = "_depth" },
-		new CapturePass() { name = "_normals" },
-		new CapturePass() { name = "_flow", supportsAntialiasing = false, needsRescale = true } // (see issue with Motion Vectors in @KNOWN ISSUES)
+		new CapturePass() { name = "_layer", supportsAntialiasing = false }
 	};
 
 	struct CapturePass {
@@ -58,8 +53,8 @@ public class ImageSynthesis_id : MonoBehaviour {
 
 		// use real camera to capture final image
 		capturePasses[0].camera = GetComponent<Camera>();
-		for (int q = 1; q < capturePasses.Length; q++)
-			capturePasses[q].camera = CreateHiddenCamera (capturePasses[q].name);
+//		for (int q = 1; q < capturePasses.Length; q++)
+//			capturePasses[q].camera = CreateHiddenCamera (capturePasses[q].name);
 
 		OnCameraChange();
 		OnSceneChange();
@@ -112,44 +107,35 @@ public class ImageSynthesis_id : MonoBehaviour {
 	}
 
 	enum ReplacelementModes {
-		ObjectId 			= 0,
 		CatergoryId			= 1,
-		DepthCompressed		= 2,
-		DepthMultichannel	= 3,
-		Normals				= 4
 	};
 
 	public void OnCameraChange()
 	{
 		int targetDisplay = 1;
 		var mainCamera = GetComponent<Camera>();
-		foreach (var pass in capturePasses)
-		{
-			if (pass.camera == mainCamera)
-				continue;
+		capturePasses[0].camera.RemoveAllCommandBuffers();
+		capturePasses[0].camera.CopyFrom(mainCamera);
+		capturePasses[0].camera.targetDisplay = targetDisplay;
+//		foreach (var pass in capturePasses)
+//		{
+//			if (pass.camera == mainCamera)
+//				continue;
+//
+//			// cleanup capturing camera
+//			pass.camera.RemoveAllCommandBuffers();
+//
+//			// copy all "main" camera parameters into capturing camera
+//			pass.camera.CopyFrom(mainCamera);
+//
+//			// set targetDisplay here since it gets overriden by CopyFrom()
+//			pass.camera.targetDisplay = targetDisplay++;
+//		}
 
-			// cleanup capturing camera
-			pass.camera.RemoveAllCommandBuffers();
-
-			// copy all "main" camera parameters into capturing camera
-			pass.camera.CopyFrom(mainCamera);
-
-			// set targetDisplay here since it gets overriden by CopyFrom()
-			pass.camera.targetDisplay = targetDisplay++;
-		}
-
-		// cache materials and setup material properties
-		if (!opticalFlowMaterial || opticalFlowMaterial.shader != opticalFlowShader)
-			opticalFlowMaterial = new Material(opticalFlowShader);
-		opticalFlowMaterial.SetFloat("_Sensitivity", opticalFlowSensitivity);
 
 		// setup command buffers and replacement shaders
-		SetupCameraWithReplacementShader(capturePasses[1].camera, uberReplacementShader, ReplacelementModes.ObjectId);
 		SetupCameraWithReplacementShader(capturePasses[0].camera, uberReplacementShader, ReplacelementModes.CatergoryId);
-		SetupCameraWithReplacementShader(capturePasses[3].camera, uberReplacementShader, ReplacelementModes.DepthCompressed, Color.white);
-		SetupCameraWithReplacementShader(capturePasses[4].camera, uberReplacementShader, ReplacelementModes.Normals);
-		SetupCameraWithPostShader(capturePasses[5].camera, opticalFlowMaterial, DepthTextureMode.Depth | DepthTextureMode.MotionVectors);
-	}
+    }
 
 
 	public void OnSceneChange()
